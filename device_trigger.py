@@ -67,7 +67,8 @@ async def async_get_triggers(hass, device_id):
         trigger_base = {
             CONF_PLATFORM: "device",
             CONF_DOMAIN: DOMAIN,
-            CONF_DEVICE_ID: device_id,
+            CONF_DEVICE_ID: device_entry.id,
+            CONF_UNIQUE_ID: device_id,
             CONF_SUBTYPE: btn.subtype
         }
         triggers.append({
@@ -100,12 +101,12 @@ async def async_attach_trigger(
         trigger_info: TriggerInfo,
 ) -> CALLBACK_TYPE:
     """Listen for state changes based on configuration."""
-    device_id = config[CONF_DEVICE_ID]
     event_config = event_trigger.TRIGGER_SCHEMA(
         {
             event_trigger.CONF_PLATFORM: "event",
             event_trigger.CONF_EVENT_TYPE: EVENT_TYPE,
             event_trigger.CONF_EVENT_DATA: {
+                CONF_DEVICE_ID: config[CONF_DEVICE_ID],
                 CONF_TYPE: config[CONF_TYPE],
                 CONF_SUBTYPE: config[CONF_SUBTYPE],
             },
