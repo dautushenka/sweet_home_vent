@@ -4,7 +4,6 @@ from homeassistant.const import (
     CONF_DEVICE_ID,
     CONF_DOMAIN,
     CONF_PLATFORM,
-    CONF_UNIQUE_ID,
 )
 from .const import (
     DOMAIN,
@@ -68,7 +67,6 @@ async def async_get_triggers(hass, device_id):
             CONF_PLATFORM: "device",
             CONF_DOMAIN: DOMAIN,
             CONF_DEVICE_ID: device_entry.id,
-            CONF_UNIQUE_ID: device_id,
             CONF_SUBTYPE: btn.subtype
         }
         triggers.append({
