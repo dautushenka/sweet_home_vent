@@ -35,7 +35,6 @@ from .const import (
 from .button import Button
 
 from .mcp23017 import Run, setButtons
-import RPi.GPIO as GPIO
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -26,6 +26,7 @@ import voluptuous as vol
 
 from homeassistant.core import CALLBACK_TYPE, callback, HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntry
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.typing import ConfigType
 
 from homeassistant.components.homeassistant.triggers import event as event_trigger
@@ -44,12 +45,13 @@ TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
 
 
 async def async_get_triggers(hass, device_id):
+    _LOGGER.debug("async_get_triggers2")
     """Return a list of triggers."""
     if DOMAIN not in hass.data:
         return []
 
-    device_registry = await hass.helpers.device_registry.async_get_registry()
-    if (device_entry := device_registry.async_get(device_id)) is None:
+    dev_reg: dr.DeviceRegistry = dr.async_get(hass)
+    if (device_entry := dev_reg.async_get(device_id)) is None:
         raise ValueError(f"Device ID {device_id} is not valid")
 
     switch_id = get_device_id(device_entry)
@@ -61,7 +63,8 @@ async def async_get_triggers(hass, device_id):
 
     if device_id in buttons is None:
         return triggers
-
+    
+    _LOGGER.debug("Start populate triggers")
     for btn in buttons[device_id]:
         trigger_base = {
             CONF_PLATFORM: "device",
@@ -89,7 +92,7 @@ async def async_get_triggers(hass, device_id):
                     **trigger_base,
                     CONF_TYPE: EVENT_TRIPLE_PRESS,
                 })
-
+    _LOGGER.debug(f"switch {switch_id} count tiggers {len(triggers)}")
     return triggers
 
 async def async_attach_trigger(
