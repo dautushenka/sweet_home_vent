@@ -111,12 +111,10 @@ def Run(logger):
                 for x in range(8):
                     value = data & (1 << x)
                     button_code = get_button_code(address, port, x)
-                    button = code2buttons.get(button_code)
                     if prev_data & (1 << x) != value:
                         logger.debug(
                             "Changed pin {} to {}".format(button_code, value)
                         )
-                        button_code = get_button_code(address, port, x)
                         button = code2buttons.get(button_code)
                         sensor = code2sensors.get(button_code)
                         if button is not None:
