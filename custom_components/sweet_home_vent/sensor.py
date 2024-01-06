@@ -1,6 +1,5 @@
 from enum import StrEnum
 import logging
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -16,10 +15,11 @@ from homeassistant.const import (
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity import EntityCategory
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
 
 _LOGGER = logging.getLogger(__name__)

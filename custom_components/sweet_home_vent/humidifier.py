@@ -1,13 +1,13 @@
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
 from typing import Optional
 
-from homeassistant.components.humidifier import HumidifierEntity, HumidifierDeviceClass
+from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
-from .entity import VentEntity, VentEntityConfig, EntityDescription
+from .coordinator import VentDataCoordinator
+from .entity import EntityDescription, VentEntity, VentEntityConfig
 
 
 async def async_setup_entry(

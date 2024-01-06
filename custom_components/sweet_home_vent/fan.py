@@ -1,7 +1,6 @@
 import logging
 from typing import Optional
 
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
 from homeassistant.components.fan import (
     FanEntity,
     FanEntityDescription,
@@ -12,6 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
 
 _LOGGER = logging.getLogger(__name__)

@@ -1,4 +1,3 @@
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -10,6 +9,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
 
 SENSORS: tuple[VentEntityConfig, ...] = (
