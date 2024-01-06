@@ -26,7 +26,12 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.info("Start setuping entry")
     hass.data.setdefault(DOMAIN, {})
-    # hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+
+    coordinator = VentDataCoordinator(hass, entry)
+    await coordinator.async_config_entry_first_refresh()
+
+    hass.data[DOMAIN][entry.entry_id] = {}
+    hass.data[DOMAIN][entry.entry_id][DATA_KEY_COORDINATOR] = coordinator
 
     params = {
         ATTR_IDENTIFIERS: {(DOMAIN, entry.entry_id)},
@@ -35,21 +40,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
     dr.async_get(hass).async_get_or_create(config_entry_id=entry.entry_id, **params)
 
-    coordinator = VentDataCoordinator(hass, entry)
-    await coordinator.async_config_entry_first_refresh()
-
-    hass.data[DOMAIN][entry.entry_id] = {}
-    hass.data[DOMAIN][entry.entry_id][DATA_KEY_COORDINATOR] = coordinator
-
+    _LOGGER.info("Start setuping platforms")
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-    # async_add_entities(
-    #     MyEntity(coordinator, idx) for idx, ent in enumerate(coordinator.data)
-    # )
-
-    # hass.async_add_job(hass.config_entries.flow.async_init(
-    #     DOMAIN
-    # ))
 
     return True
 
