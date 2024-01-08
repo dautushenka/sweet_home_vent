@@ -62,15 +62,11 @@ class VentCover(VentEntity, CoverEntity):
         self._attr_supported_features = config["features"]
 
     async def async_open_cover(self, **kwargs):
-        await self.coordinator.writeRegister(self._reg_num, 1)
-
-    async def async_close_cover(self, **kwargs):
         await self.coordinator.writeRegister(self._reg_num, 0)
 
-    @property
-    def current_cover_position(self):
-        return self.coordinator.data[self._reg_type][self._reg_num]
+    async def async_close_cover(self, **kwargs):
+        await self.coordinator.writeRegister(self._reg_num, 1)
 
     @property
     def is_closed(self):
-        return self.coordinator.data[self._reg_type][self._reg_num] < 1
+        return self.coordinator.data[self._reg_type][self._reg_num] > 0

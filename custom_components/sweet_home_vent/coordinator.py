@@ -22,10 +22,8 @@ CALL_TYPE_WRITE_REGISTER = "write_register"
 class VentDataCoordinator(DataUpdateCoordinator):
     _hub: ModbusHub
     _addr: int
-    """My custom coordinator."""
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry):
-        """Initialize my coordinator."""
         super().__init__(
             hass,
             _LOGGER,
@@ -86,4 +84,3 @@ class VentDataCoordinator(DataUpdateCoordinator):
         data[RegType.DISCRETE] = result.bits
 
         return data
-        # _LOGGER.info(result.registers[0])
