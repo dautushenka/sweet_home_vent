@@ -1,5 +1,5 @@
 from enum import StrEnum
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
+import logging
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -15,11 +15,14 @@ from homeassistant.const import (
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity import EntityCategory
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class SensorType(StrEnum):
@@ -159,6 +162,7 @@ def notNone(pair):
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
+    _LOGGER.info("Start setupping sensor platform")
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_KEY_COORDINATOR]
 
     sensors = []

@@ -3,7 +3,7 @@ from typing import Any
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.components.modbus import get_hub
+from homeassistant.components.modbus import get_hub, DEFAULT_HUB
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 
@@ -19,12 +19,14 @@ from .const import (
 def _getFormFields(user_input: dict[str, Any]) -> dict:
     user_input = {} if user_input is None else user_input
     return {
-        vol.Required(CONFIG_KEY_HUB, default=user_input.get(CONFIG_KEY_HUB, "")): str,
         vol.Required(
-            CONFIG_KEY_VENT_ADDR, default=user_input.get(CONFIG_KEY_VENT_ADDR, "")
+            CONFIG_KEY_HUB, default=user_input.get(CONFIG_KEY_HUB, DEFAULT_HUB)
+        ): str,
+        vol.Required(
+            CONFIG_KEY_VENT_ADDR, default=user_input.get(CONFIG_KEY_VENT_ADDR, 1)
         ): vol.All(int, vol.Range(min=1)),
         vol.Required(
-            OPTION_KEY_UPD_FREQ, default=user_input.get(OPTION_KEY_UPD_FREQ, "")
+            OPTION_KEY_UPD_FREQ, default=user_input.get(OPTION_KEY_UPD_FREQ, 15)
         ): vol.All(int, vol.Range(min=10)),
     }
 
@@ -99,6 +101,10 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 step_id="init",
                 **form,
             )
+        await self.hass.config_entries.async_update_entry(
+            entry=self.config_entry,
+            unique_id=f"{user_input[CONFIG_KEY_HUB]}-{user_input[CONFIG_KEY_VENT_ADDR]}",
+        )
         await self.hass.config_entries.async_reload(self.config_entry.entry_id)
 
         return self.async_create_entry(title="", data=user_input)

@@ -1,17 +1,20 @@
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
+import logging
 from typing import Optional
 
 from homeassistant.components.fan import (
-    FanEntityDescription,
     FanEntity,
+    FanEntityDescription,
     FanEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class VentFanConfig(VentEntityConfig):
@@ -36,6 +39,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_KEY_COORDINATOR]
+    _LOGGER.info("Start setupping fan platform")
 
     sensors = []
     for config in FANS:
@@ -47,6 +51,7 @@ async def async_setup_entry(
         config["description"] = FanEntityDescription(**args)
         sensors.append(VentFanEntity(coordinator, config, entry))
 
+    _LOGGER.debug("Adding fan entity")
     async_add_entities(sensors)
 
 

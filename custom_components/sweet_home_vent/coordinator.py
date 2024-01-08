@@ -65,6 +65,7 @@ class VentDataCoordinator(DataUpdateCoordinator):
             self._addr, 0, 16, CALL_TYPE_REGISTER_INPUT
         )
         if not result:
+            _LOGGER.warning("Fail to get input registers")
             raise UpdateFailed("Error communicating with device")
 
         data[RegType.INPUT] = result.registers
@@ -73,12 +74,14 @@ class VentDataCoordinator(DataUpdateCoordinator):
             self._addr, 0, 9, CALL_TYPE_REGISTER_HOLDING
         )
         if not result:
+            _LOGGER.warning("Fail to get holding registers")
             raise UpdateFailed("Error communicating with device")
 
         data[RegType.HOLDING] = result.registers
 
         result = await self._hub.async_pb_call(self._addr, 0, 1, CALL_TYPE_DISCRETE)
         if not result:
+            _LOGGER.warning("Fail to get descrete registers")
             raise UpdateFailed("Error communicating with device")
 
         data[RegType.DISCRETE] = result.bits

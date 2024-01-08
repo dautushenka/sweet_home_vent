@@ -1,16 +1,15 @@
-from config.custom_components.sweet_home_vent.coordinator import VentDataCoordinator
-
 from homeassistant.components.cover import (
-    CoverEntityDescription,
-    CoverEntity,
-    CoverEntityFeature,
     CoverDeviceClass,
+    CoverEntity,
+    CoverEntityDescription,
+    CoverEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import *
+from .coordinator import VentDataCoordinator
 from .entity import VentEntity, VentEntityConfig
 
 
